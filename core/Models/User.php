@@ -2,7 +2,7 @@
 
 namespace Models;
 
-class User extends AbstractModel
+class User extends AbstractModel implements \JsonSerializable
 {
     protected string $tableName = "users";
     private string $username;
@@ -96,6 +96,7 @@ class User extends AbstractModel
      */
     public function findByUsername(string $username): User | bool
     {
+
         $sql = $this->pdo->prepare("SELECT * FROM {$this->tableName} WHERE username = :username");
 
         $sql->execute([
@@ -165,5 +166,13 @@ class User extends AbstractModel
             $modelUser = new \Models\User();
            return $modelUser->findById($_SESSION["user"]["id"]);
         }
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "id" => $this->id,
+            "displayName" => $this->getDisplayName()
+        ];
     }
 }

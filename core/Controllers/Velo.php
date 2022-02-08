@@ -9,12 +9,24 @@ class Velo extends AbstractController
     public function index()
     {
         $velos = $this->defaultModel->findAll();
+        /*
+        header('Access-Control-Allow-Origin: *');
+        */
+        echo json_encode($velos);
 
         return $this->render("velos/index", [
             "pageTitle" => "Tous les vélos",
             "velos" => $velos,
         ]);
     }
+
+    public function indexapi()
+    {
+        return $this->json($this->defaultModel->findAll());
+    }
+
+
+
 
     /**
      * Bike creation:
@@ -33,6 +45,8 @@ class Velo extends AbstractController
      */
     public function new()
     {
+        $user = $this->getUser();
+
         $name = null;
         $description = null;
         $price = null;
@@ -54,11 +68,14 @@ class Velo extends AbstractController
         if ($name && $description && $price && !empty($_FILES["imageVelo"]))
         {
             $file = new \App\File("imageVelo");
+            var_dump($file->isImage($_FILES["imageVelo"]));
+            var_dump($_FILES["imageVelo"]); die();
             if (!$file->isImage($_FILES["imageVelo"]))
             {
                 $this->redirect([
                     "type" => "velo",
-                    "action" => "new"
+                    "action" => "new",
+                    "info" => "The bike could not be created."
                 ]);
             }
             $file->upload();
@@ -69,12 +86,14 @@ class Velo extends AbstractController
             $velo->setDescription($description);
             $velo->setImage($file->getName());
             $velo->setPrice($price);
+            $velo->setUserId($user->getId());
     
             $this->defaultModel->save($velo);
             
             return $this->redirect([
                 "type" => "velo",
-                "action" => "index"
+                "action" => "index",
+                "info" => "The bike was successfully created."
             ]);
         }
 
@@ -161,6 +180,31 @@ class Velo extends AbstractController
 
     }
 
+    public function showapi()
+    {
+        $id = null;
+
+        if (!empty($_GET["id"]) && ctype_digit($_GET["id"]))
+        {
+            $id = (int)$_GET["id"];
+        }
+
+        if (!$id)
+        {
+            return $this->json("ID is invalid");
+        }
+
+        $velo = $this->defaultModel->findById($id);
+
+        if (!$velo)
+        {
+
+            return $this->json("ID is not found");
+        }
+
+        return $this->json($velo);
+
+    }
 
     /**
      * Velo edition:

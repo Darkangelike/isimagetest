@@ -104,6 +104,11 @@ class User extends AbstractController
                 ]);
             }
 
+            $this->redirect([
+                "type" => "velo",
+                "action" => "index"
+            ]);
+
         }
 
         $this->render("users/login", [

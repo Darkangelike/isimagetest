@@ -1,9 +1,4 @@
-<div>
-    <a href="?type=velo&action=index">Vélos</a>
-    <a class="btn btn-info" href="?type=velo&action=new">
-        <i class="fas fa-plus-circle"></i></a>
-</div>
-        
+
 <!-- CARD GROUP -->
 <div class="card-group justify-content-center">
     <?php foreach ($velos as $velo) { ?>

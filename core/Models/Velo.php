@@ -2,7 +2,7 @@
 
 namespace Models;
 
-class Velo extends AbstractModel
+class Velo extends AbstractModel implements \JsonSerializable
 {
     protected string $tableName = "velos";
     private string $name;
@@ -60,6 +60,36 @@ class Velo extends AbstractModel
         $this->price = $price;
     }
 
+    // property user gs
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(int $user_id): void
+    {
+
+    }
+
+    public function getAuthor(): User
+    {
+        $modelUser = new \Models\User();
+        return $modelUser->findById($this->user_id);
+    }
+
+    public function jsonSerialize()
+    {
+        $modelUser = new \Models\User();
+        return [
+            "name" => $this->name,
+            "id" => $this->id,
+            "price" => $this->price,
+            "description" => $this->description,
+            "user" => $modelUser->findById($this->user_id),
+            "avis" => $this->getAvis(),
+            "image" => $this->image
+        ];
+    }
 
     // METHODS
     
@@ -72,13 +102,14 @@ class Velo extends AbstractModel
     public function save(Velo $velo):void
     {
 
-        $sql = $this->pdo->prepare("INSERT INTO {$this->tableName} (name, description, image, price)
-        VALUES (:name, :description, :image, :price)");
+        $sql = $this->pdo->prepare("INSERT INTO {$this->tableName} (name, description, image, price, user_id)
+        VALUES (:name, :description, :image, :price, :user_id)");
         $sql->execute([
             "name" => $velo->name,
             "description" => $velo->description,
             "image" => $velo->image,
             "price" => $velo->price,
+            "user_id" => $velo->user_id
         ]);
     }
 
@@ -90,7 +121,7 @@ class Velo extends AbstractModel
     public function getAvis()
     {
         $modelAvis = new \Models\Avis();
-        return $modelAvis->findAllById($this);
+        return $modelAvis->findAllById($this->getId());
     }
 
 }

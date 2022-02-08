@@ -8,16 +8,16 @@ abstract class AbstractController
     protected $defaultModelName;
 
     public function __construct()
-        {
-            $this->defaultModel = new $this->defaultModelName();
-        }
-    
+    {
+        $this->defaultModel = new $this->defaultModelName();
+    }
+
     /**
      * Displays a page using different html templates and an array of data
-     * 
+     *
      * @param string $template
      * @param array $donnees
-     * 
+     *
      */
     public function render(string $template, array $donnees)
     {
@@ -26,12 +26,12 @@ abstract class AbstractController
 
     /**
      * Redirect to the given $url in parameter
-     * 
+     *
      * @param array $parameters
-     * 
+     *
      * @return \App\Response
      */
-    public function redirect(?array $parameters = null):\App\Response
+    public function redirect(?array $parameters = null): \App\Response
     {
         return \App\Response::redirect($parameters);
     }
@@ -44,11 +44,16 @@ abstract class AbstractController
      *
      * @return false|User
      */
-    public function getUser(){
+    public function getUser()
+    {
         return \Models\user::getUser();
     }
+
+    public function json($infoToReturn)
+    {
+        return \App\Response::json($infoToReturn);
+    }
+
+
 }
-
-
-
 ?>

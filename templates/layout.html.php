@@ -27,6 +27,13 @@
             </li>
 
         <?php } ?>
+        <?php if (isset($_SESSION["user"])) { ?>
+
+            <li class="p-2 nav-item">
+                <a class="nav-link" href="?type=velo&action=new">Vélo <i class="fas fa-plus-circle"></i></a>
+            </li>
+
+        <?php } ?>
 
         <?php if (!isset($_SESSION["user"])) { ?>
             <li class="p-2 nav-item">
@@ -38,7 +45,8 @@
         <?php } ?>
         <?php if (isset($_SESSION["user"])) { ?>
         <li class="p-2 nav-item">
-            <button class="btn btn-info"><?= $_SESSION["user"]["username"] ?> is connected</button>
+            <button class="btn btn-info">
+                <?= $_SESSION["user"]["username"] ?> is connected</button>
         </li>
         <li class="p-2 nav-item">
             <a href="?type=user&action=logout" class="btn btn-danger">Log out</a>

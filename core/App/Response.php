@@ -4,6 +4,19 @@ namespace App;
 
 class Response
 {
+
+    /**
+     * Return
+     * @param $infoToReturn
+     * @return void
+     */
+    public static function json($infoToReturn)
+    {
+        header('Access-Control-Allow-Origin: *');
+        echo json_encode($infoToReturn);
+    }
+
+
     /**
      * Redirect the page towards an url created using an array with its keys and values
      * 

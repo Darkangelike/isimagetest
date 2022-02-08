@@ -6,7 +6,6 @@ class Avis extends AbstractController
 {
     protected $defaultModelName = \Models\Avis::class;
 
-
     /**
      * 
      * Checks the form values
@@ -70,8 +69,6 @@ class Avis extends AbstractController
                 "action" => "show",
                 "id" => $velo_id
         ]);
-
-
     }
 
     /**
@@ -86,21 +83,10 @@ class Avis extends AbstractController
         $id = null;
         $velo_id = null;
 
-        if (!empty($_POST["id"]) && ctype_digit($_POST["id"]))
-        {
-            $id = (int)$_POST["id"];
-        }
-        if (!empty($_POST["velo_id"]) && ctype_digit($_POST["velo_id"]))
-        {
-            $velo_id = (int)$_POST["velo_id"];
-        }
-
-        $velo = new \Models\Velo();
-
-        $velo = $velo->findById($velo_id);
+        if (!empty($_POST["id"]) && ctype_digit($_POST["id"])) {$id = (int)$_POST["id"];}
+        if (!empty($_POST["velo_id"]) && ctype_digit($_POST["velo_id"])){$velo_id = (int)$_POST["velo_id"];}
 
         $avis = $this->defaultModel->findById($id);
-
         if (!$avis)
         {
             $this->redirect([
@@ -109,7 +95,7 @@ class Avis extends AbstractController
                 "id" => $velo_id
             ]);
         }
-        
+
         $this->defaultModel->remove($id);
 
         $this->redirect([
@@ -118,8 +104,6 @@ class Avis extends AbstractController
                 "id" => $velo_id
         ]);
     }
-
-
 }
 
 ?>

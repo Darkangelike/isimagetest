@@ -2,13 +2,14 @@
 
 namespace Models;
 
-class Avis extends AbstractModel
+class Avis extends AbstractModel implements \JsonSerializable
 {
 
     protected string $tableName = "avis";
     private string $author;
     private string $content;
     private int $velo_id;
+    private int $user_id;
 
     public function getId(): int
     {
@@ -50,6 +51,16 @@ class Avis extends AbstractModel
         return $this->velo_id;
     }
 
+    public function setUser_Id($user_id): void
+    {
+        $this->user_id = $user_id;
+    }
+
+    public function getUser_Id(): int
+    {
+        return $this->user_id;
+    }
+
 
     /**
      * Avis creation:
@@ -87,5 +98,16 @@ class Avis extends AbstractModel
         $elements = $sql->fetchAll(\PDO::FETCH_CLASS, get_class($this));
 
         return $elements;
+    }
+
+    public function jsonSerialize()
+    {
+        $modelUser = new \Models\User();
+        return [
+            "id" => $this->id,
+            "author" => $modelUser->findById($this->user_id),
+            "content" => $this->content,
+        ];
+
     }
 }
